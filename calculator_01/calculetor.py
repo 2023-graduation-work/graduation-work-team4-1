@@ -16,7 +16,6 @@ def calculate():
         result = eval(expression)
         entry.delete(0, tk.END)
         entry.insert(0, result)
-        # 表示する値もラジアンから度に変換して表示
         history_list.insert(tk.END, f"{expression} = {math.degrees(result)}°")
     except Exception as e:
         entry.delete(0, tk.END)
@@ -27,7 +26,6 @@ def calculate_function(func):
     expression = entry.get()
     try:
         value = float(expression)
-        # 入力値をラジアンに変換
         value_rad = math.radians(value)
         if func == 'sqrt':
             result = math.sqrt(value_rad)
@@ -35,7 +33,6 @@ def calculate_function(func):
             result = getattr(math, func)(value_rad)
         entry.delete(0, tk.END)
         entry.insert(0, result)
-        # 表示する値もラジアンから度に変換して表示
         history_list.insert(tk.END, f"{func}({math.degrees(value_rad)}°) = {math.degrees(result)}°")
     except Exception as e:
         entry.delete(0, tk.END)
