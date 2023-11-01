@@ -16,7 +16,7 @@ def calculate():
         result = eval(expression)
         entry.delete(0, tk.END)
         entry.insert(0, result)
-        history_list.insert(tk.END, f"{expression} = {result}")
+        history_list.insert(tk.END, f"{expression} = {math.degrees(result)}°")
     except Exception as e:
         entry.delete(0, tk.END)
         entry.insert(0, "エラー")
@@ -25,13 +25,15 @@ def calculate():
 def calculate_function(func):
     expression = entry.get()
     try:
+        value = float(expression)
+        value_rad = math.radians(value)
         if func == 'sqrt':
-            result = math.sqrt(eval(expression))
+            result = math.sqrt(value_rad)
         else:
-            result = getattr(math, func)(eval(expression))
+            result = getattr(math, func)(value_rad)
         entry.delete(0, tk.END)
         entry.insert(0, result)
-        history_list.insert(tk.END, f"{func}({expression}) = {result}")
+        history_list.insert(tk.END, f"{func}({math.degrees(value_rad)}°) = {math.degrees(result)}°")
     except Exception as e:
         entry.delete(0, tk.END)
         entry.insert(0, "エラー")
