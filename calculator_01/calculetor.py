@@ -40,8 +40,7 @@ def calculate_function(func):
 def exit_app():
     root.quit()
 
-# 時間計算機能の関数
-def convert_units(history_list):  # Pass history_list as a parameter
+def convert_units(history_list):
     input_value = float(entry_value.get())
     input_unit = unit_var.get()
 
@@ -62,45 +61,33 @@ def convert_units(history_list):  # Pass history_list as a parameter
 root = tk.Tk()
 root.title("アプリ")
 
-# タブ用のNotebookウィジェット
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 
-# タブ1: 電卓機能
 frame_calculator = tk.Frame(notebook)
 notebook.add(frame_calculator, text="電卓")
 
-# タブ2: 時間計算機能
 frame_time_converter = tk.Frame(notebook)
 notebook.add(frame_time_converter, text="時間変換")
 
-# Create a new tab for history
 frame_history = tk.Frame(notebook)
 notebook.add(frame_history, text="履歴")
 
-# メインウィンドウの設定
-root.geometry("200x450")  # Initial window size
+root.geometry("200x450")
 
-# メニューバーを作成
 menubar = tk.Menu(root)
 root.config(menu=menubar)
 
-# ファイルメニューを追加
 file_menu = tk.Menu(menubar)
 menubar.add_cascade(label="ファイル", menu=file_menu)
 file_menu.add_command(label="終了", command=exit_app)
 
-# 電卓機能
-
-# 入力欄
 entry = tk.Entry(frame_calculator, bg="white", font=('Helvetica', 20))
 entry.pack(fill="x", padx=10, pady=10)
 
-# Button width and height
-btn_width = 2  # Reduce the button width
-btn_height = 1  # Reduce the button height
+btn_width = 2
+btn_height = 1
 
-# ボタン
 buttons = [
     ("7", "white"), ("8", "white"), ("9", "white"), ("/", "white"),
     ("4", "white"), ("5", "white"), ("6", "white"), ("*", "white"),
@@ -109,7 +96,6 @@ buttons = [
     ("sqrt", "white"), ("sin", "white"), ("cos", "white"), ("tan", "white"),
 ]
 
-# Create button frame
 button_frame = tk.Frame(frame_calculator)
 button_frame.pack()
 
@@ -126,19 +112,16 @@ for label, color in buttons:
         col_val = 0
         row_val += 1
 
-# クリアボタン
 clear_button = tk.Button(frame_calculator, text="クリア", padx=5, pady=5, width=btn_width * 2, height=btn_height, command=clear, bg="white", font=('Helvetica', 16))
 clear_button.pack()
 
-# 履歴
 history_label = tk.Label(frame_history, text="履歴", bg="black", fg="white", font=('Helvetica', 16))
 history_label.pack()
 
 history_list = tk.Listbox(frame_history, bg="white", font=('Helvetica', 14))
 history_list.pack(fill="both", expand=True)
 
-# 時間計算機能のウィジェット
-instruction_label = tk.Label(frame_time_converter, text="変換したい単位を選択し、値を入力してください:", font=('Helvetica', 14))
+instruction_label = tk.Label(frame_time_converter,font=('Helvetica', 14))
 instruction_label.pack()
 
 unit_var = tk.StringVar()
@@ -152,7 +135,7 @@ entry_value.pack(fill="x", padx=10, pady=10)
 convert_button = tk.Button(frame_time_converter, text="変換", command=lambda: convert_units(history_list), font=('Helvetica', 14))
 convert_button.pack()
 
-result_label = tk.Label(frame_time_converter, font=('Helvetica', 14))
+result_label = tk.Label(frame_time_converter, font=('Helvetica', 10))
 result_label.pack()
 
 root.mainloop()
