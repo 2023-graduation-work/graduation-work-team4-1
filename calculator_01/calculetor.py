@@ -26,7 +26,9 @@ def button_click(number):
     entry.insert(0, current + str(number))
 
 def clear():
+    global memory
     global memory  # メモリーをクリア
+
     memory = 0
     entry.delete(0, tk.END)
 
@@ -36,7 +38,7 @@ def calculate():
         result = eval(expression)
         entry.delete(0, tk.END)
         entry.insert(0, result)
-        history_list.insert(tk.END, f"{expression} = {math.degrees(result)}°")
+        history_list.insert(tk.END, f"{expression} = {result}")
     except Exception as e:
         entry.delete(0, tk.END)
         entry.insert(0, "エラー")
@@ -180,7 +182,6 @@ for label, color in buttons:
     if col_val > 3:
         col_val = 0
         row_val += 1
-
 
 clear_button = tk.Button(frame_calculator, text="クリア", padx=60, pady=5, width=btn_width * 2, height=btn_height, command=clear, bg="white", font=('Helvetica', 16))
 clear_button.pack()
