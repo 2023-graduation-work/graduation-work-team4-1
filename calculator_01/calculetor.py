@@ -182,7 +182,6 @@ for label, color in buttons:
         col_val = 0
         row_val += 1
         
-
 history_label = tk.Label(frame_history, text="履歴", bg="black", fg="white", font=('Helvetica', 16))
 history_label.pack()
 
@@ -196,6 +195,7 @@ unit_var = tk.StringVar()
 unit_var.set("時間から分")
 unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var,"日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
 unit_option_menu.pack()
+
 
 entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 16))
 entry_value.pack(fill="x", padx=10, pady=10)
