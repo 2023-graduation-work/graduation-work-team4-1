@@ -2,12 +2,32 @@ import tkinter as tk
 import math
 from tkinter import ttk
 
+memory = 0
+
+def add_to_memory():
+    global memory
+    current_value = float(entry.get())
+    memory += current_value
+    entry.delete(0, tk.END)
+
+def subtract_from_memory():
+    global memory
+    current_value = float(entry.get())
+    memory -= current_value
+    entry.delete(0, tk.END)
+
+def display_memory():
+    entry.delete(0, tk.END)
+    entry.insert(0, str(memory))
+
 def button_click(number):
     current = entry.get()
     entry.delete(0, tk.END)
     entry.insert(0, current + str(number))
 
 def clear():
+    global memory  # メモリーをクリア
+    memory = 0
     entry.delete(0, tk.END)
 
 def calculate():
@@ -84,6 +104,7 @@ def convert_units(history_list):
         result_label.config(text=f"{input_value} 秒は {result} 分です")
     history_list.insert(tk.END, result_label.cget("text"))
 
+
 root = tk.Tk()
 root.title("アプリ")
 
@@ -122,11 +143,34 @@ buttons = [
     ("sqrt", "white"), ("sin", "white"), ("cos", "white"), ("tan", "white"),
 ]
 
+
 button_frame = tk.Frame(frame_calculator)
 button_frame.pack()
 
 row_val = 0
 col_val = 0
+
+add_memory_button = tk.Button(button_frame, text="M+", command=add_to_memory, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
+add_memory_button.grid(row=row_val, column=col_val, padx=2, pady=2)
+
+col_val += 1
+
+subtract_memory_button = tk.Button(button_frame, text="M-", command=subtract_from_memory, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
+subtract_memory_button.grid(row=row_val, column=col_val, padx=2, pady=2)
+
+col_val += 1
+
+display_memory_button = tk.Button(button_frame, text="M", command=display_memory, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
+display_memory_button.grid(row=row_val, column=col_val, padx=2, pady=2)
+
+col_val += 1
+
+clear_button = tk.Button(button_frame, text="C", command=clear, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
+clear_button.grid(row=row_val, column=col_val, padx=2, pady=2)
+
+row_val += 1
+col_val = 0
+
 for label, color in buttons:
     if label in ["sqrt", "sin", "cos", "tan"]:
         tk.Button(button_frame, text=label, padx=5, pady=5, width=btn_width, height=btn_height, command=lambda b=label: calculate_function(b), bg=color, font=('Helvetica', 14)).grid(row=row_val, column=col_val, padx=2, pady=2)
@@ -147,7 +191,7 @@ history_label.pack()
 history_list = tk.Listbox(frame_history, bg="white", font=('Helvetica', 14))
 history_list.pack(fill="both", expand=True)
 
-instruction_label = tk.Label(frame_time_converter,font=('Helvetica', 14))
+instruction_label = tk.Label(frame_time_converter, font=('Helvetica', 14))
 instruction_label.pack()
 
 
@@ -155,6 +199,7 @@ unit_var = tk.StringVar()
 unit_var.set("時間から分")
 unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var,"日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
 unit_option_menu.pack()
+
 
 entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 16))
 entry_value.pack(fill="x", padx=10, pady=10)
@@ -164,5 +209,7 @@ convert_button.pack()
 
 result_label = tk.Label(frame_time_converter, font=('Helvetica', 10))
 result_label.pack()
+
+
 
 root.mainloop()
