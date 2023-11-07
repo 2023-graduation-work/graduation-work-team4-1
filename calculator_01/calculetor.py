@@ -27,6 +27,8 @@ def button_click(number):
 
 def clear():
     global memory
+    global memory  # メモリーをクリア
+
     memory = 0
     entry.delete(0, tk.END)
 
@@ -104,6 +106,7 @@ def convert_units(history_list):
         result_label.config(text=f"{input_value} 秒は {result} 分です")
     history_list.insert(tk.END, result_label.cget("text"))
 
+
 root = tk.Tk()
 root.title("アプリ")
 
@@ -140,6 +143,7 @@ buttons = [
     ("1", "white"), ("2", "white"), ("3", "white"), ("-", "white"),
     ("0", "white"), (".", "white"), ("=", "white"), ("+", "white"),
 ]
+
 
 button_frame = tk.Frame(frame_calculator)
 button_frame.pack()
@@ -179,6 +183,9 @@ for label, color in buttons:
         col_val = 0
         row_val += 1
 
+clear_button = tk.Button(frame_calculator, text="クリア", padx=60, pady=5, width=btn_width * 2, height=btn_height, command=clear, bg="white", font=('Helvetica', 16))
+clear_button.pack()
+
 history_label = tk.Label(frame_history, text="履歴", bg="black", fg="white", font=('Helvetica', 16))
 history_label.pack()
 
@@ -188,10 +195,12 @@ history_list.pack(fill="both", expand=True)
 instruction_label = tk.Label(frame_time_converter, font=('Helvetica', 14))
 instruction_label.pack()
 
+
 unit_var = tk.StringVar()
 unit_var.set("時間から分")
 unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var,"日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
 unit_option_menu.pack()
+
 
 entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 16))
 entry_value.pack(fill="x", padx=10, pady=10)
@@ -201,5 +210,6 @@ convert_button.pack()
 
 result_label = tk.Label(frame_time_converter, font=('Helvetica', 10))
 result_label.pack()
+
 
 root.mainloop()
