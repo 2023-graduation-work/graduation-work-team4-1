@@ -170,7 +170,7 @@ row_val += 1
 col_val = 0
 
 for label, color in buttons:
-    if label in ["sqrt", "sin", "cos", "tan"]:
+    if label in []:
         tk.Button(button_frame, text=label, padx=5, pady=5, width=btn_width, height=btn_height, command=lambda b=label: calculate_function(b), bg=color, font=('Helvetica', 14)).grid(row=row_val, column=col_val, padx=2, pady=2)
     else:
         tk.Button(button_frame, text=label, padx=5, pady=5, width=btn_width, height=btn_height, command=lambda b=label: button_click(b) if b != "=" else calculate(), bg=color, font=('Helvetica', 16)).grid(row=row_val, column=col_val, padx=2, pady=2)
