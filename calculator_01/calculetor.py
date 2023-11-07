@@ -181,7 +181,10 @@ for label, color in buttons:
     if col_val > 3:
         col_val = 0
         row_val += 1
-        
+
+clear_button = tk.Button(frame_calculator, text="クリア", padx=60, pady=5, width=btn_width * 2, height=btn_height, command=clear, bg="white", font=('Helvetica', 16))
+clear_button.pack()
+
 history_label = tk.Label(frame_history, text="履歴", bg="black", fg="white", font=('Helvetica', 16))
 history_label.pack()
 
@@ -190,6 +193,7 @@ history_list.pack(fill="both", expand=True)
 
 instruction_label = tk.Label(frame_time_converter, font=('Helvetica', 14))
 instruction_label.pack()
+
 
 unit_var = tk.StringVar()
 unit_var.set("時間から分")
