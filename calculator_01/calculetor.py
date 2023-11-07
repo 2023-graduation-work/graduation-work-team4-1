@@ -45,8 +45,26 @@ def exit_app():
 def convert_units(history_list):
     input_value = float(entry_value.get())
     input_unit = unit_var.get()
-
-    if input_unit == "時間から分":
+    
+    if input_unit == "日から時間":
+        result = input_value * 24
+        result_label.config(text=f"{input_value} 日は {result} 時間です")
+    elif input_unit == "時間から日":
+        result = input_value / 24
+        result_label.config(text=f"{input_value} 時間は {result} 日です")
+    elif input_unit == "日から分":
+        result = input_value * 1440
+        result_label.config(text=f"{input_value} 日は {result} 分です")
+    elif input_unit == "分から日":
+        result = input_value / 1440
+        result_label.config(text=f"{input_value} 分は {result} 日です")
+    elif input_unit == "日から秒":
+        result = input_value * 86400
+        result_label.config(text=f"{input_value} 日は {result} 秒です")
+    elif input_unit == "秒から日":
+        result = input_value / 86400
+        result_label.config(text=f"{input_value} 秒は {result} 日です")
+    elif input_unit == "時間から分":
         result = input_value * 60
         result_label.config(text=f"{input_value} 時間は {result} 分です")
     elif input_unit == "分から時間":
@@ -55,6 +73,12 @@ def convert_units(history_list):
     elif input_unit == "時間から秒":
         result = input_value * 3600
         result_label.config(text=f"{input_value} 時間は {result} 秒です")
+    elif input_unit == "秒から時間":
+        result = input_value / 3600
+        result_label.config(text=f"{input_value} 秒は {result} 時間です")
+    elif input_unit == "分から秒":
+        result = input_value * 60
+        result_label.config(text=f"{input_value} 分は {result} 秒です")
     elif input_unit == "秒から分":
         result = input_value / 60
         result_label.config(text=f"{input_value} 秒は {result} 分です")
@@ -128,7 +152,7 @@ instruction_label.pack()
 
 unit_var = tk.StringVar()
 unit_var.set("時間から分")
-unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var, "時間から分", "分から時間", "時間から秒", "秒から分")
+unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var,"日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
 unit_option_menu.pack()
 
 entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 16))
