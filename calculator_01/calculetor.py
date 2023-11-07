@@ -150,6 +150,7 @@ history_list.pack(fill="both", expand=True)
 instruction_label = tk.Label(frame_time_converter,font=('Helvetica', 14))
 instruction_label.pack()
 
+
 unit_var = tk.StringVar()
 unit_var.set("時間から分")
 unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var,"日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
