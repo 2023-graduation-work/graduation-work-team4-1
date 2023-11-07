@@ -183,9 +183,6 @@ for label, color in buttons:
         col_val = 0
         row_val += 1
 
-clear_button = tk.Button(frame_calculator, text="クリア", padx=60, pady=5, width=btn_width * 2, height=btn_height, command=clear, bg="white", font=('Helvetica', 16))
-clear_button.pack()
-
 history_label = tk.Label(frame_history, text="履歴", bg="black", fg="white", font=('Helvetica', 16))
 history_label.pack()
 
