@@ -140,7 +140,6 @@ buttons = [
     ("4", "white"), ("5", "white"), ("6", "white"), ("*", "white"),
     ("1", "white"), ("2", "white"), ("3", "white"), ("-", "white"),
     ("0", "white"), (".", "white"), ("=", "white"), ("+", "white"),
-    ("sqrt", "white"), ("sin", "white"), ("cos", "white"), ("tan", "white"),
 ]
 
 
@@ -182,6 +181,7 @@ for label, color in buttons:
         col_val = 0
         row_val += 1
 
+
 clear_button = tk.Button(frame_calculator, text="クリア", padx=60, pady=5, width=btn_width * 2, height=btn_height, command=clear, bg="white", font=('Helvetica', 16))
 clear_button.pack()
 
@@ -209,7 +209,6 @@ convert_button.pack()
 
 result_label = tk.Label(frame_time_converter, font=('Helvetica', 10))
 result_label.pack()
-
 
 
 root.mainloop()
