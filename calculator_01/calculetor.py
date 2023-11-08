@@ -27,8 +27,6 @@ def button_click(number):
 
 def clear():
     global memory
-    global memory  # メモリーをクリア
-
     memory = 0
     entry.delete(0, tk.END)
 
@@ -104,8 +102,8 @@ def convert_units(history_list):
     elif input_unit == "秒から分":
         result = input_value / 60
         result_label.config(text=f"{input_value} 秒は {result} 分です")
-    history_list.insert(tk.END, result_label.cget("text"))
-
+    
+    history_list.insert(tk.END, f"{input_value} {input_unit} = {result}")
 
 root = tk.Tk()
 root.title("アプリ")
@@ -131,7 +129,7 @@ file_menu = tk.Menu(menubar)
 menubar.add_cascade(label="ファイル", menu=file_menu)
 file_menu.add_command(label="終了", command=exit_app)
 
-entry = tk.Entry(frame_calculator, bg="white", font=('Helvetica', 20))
+entry = tk.Entry(frame_calculator, bg="white", font=('Helvetica', 20), justify="right")
 entry.pack(fill="x", padx=10, pady=10)
 
 btn_width = 2
@@ -143,7 +141,6 @@ buttons = [
     ("1", "white"), ("2", "white"), ("3", "white"), ("-", "white"),
     ("0", "white"), (".", "white"), ("=", "white"), ("+", "white"),
 ]
-
 
 button_frame = tk.Frame(frame_calculator)
 button_frame.pack()
@@ -192,14 +189,12 @@ history_list.pack(fill="both", expand=True)
 instruction_label = tk.Label(frame_time_converter, font=('Helvetica', 14))
 instruction_label.pack()
 
-
 unit_var = tk.StringVar()
 unit_var.set("時間から分")
 unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var,"日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
 unit_option_menu.pack()
 
-
-entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 16))
+entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 16), justify="right")
 entry_value.pack(fill="x", padx=10, pady=10)
 
 convert_button = tk.Button(frame_time_converter, text="変換", command=lambda: convert_units(history_list), font=('Helvetica', 14))
@@ -207,6 +202,5 @@ convert_button.pack()
 
 result_label = tk.Label(frame_time_converter, font=('Helvetica', 10))
 result_label.pack()
-
 
 root.mainloop()
