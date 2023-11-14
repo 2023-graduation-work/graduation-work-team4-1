@@ -208,7 +208,7 @@ unit_var.set("時間から分")
 unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var, "日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
 unit_option_menu.pack()
 
-entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 16), justify="right")
+entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 14), justify="right")
 entry_value.pack(fill="x", padx=10, pady=10)
 
 convert_button = tk.Button(frame_time_converter, text="変換", command=lambda: convert_units(history_list), font=('Helvetica', 14))
