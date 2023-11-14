@@ -3,6 +3,7 @@ import math
 from tkinter import ttk
 
 memory = 0
+flag = False
 
 def add_to_memory():
     global memory
@@ -21,28 +22,36 @@ def display_memory():
     entry.insert(0, str(memory))
 
 def button_click(number):
+    global flag
+    if flag:
+        entry.delete(0, tk.END)
+        flag = False
     current = entry.get()
     entry.delete(0, tk.END)
     entry.insert(0, current + str(number))
 
 def clear():
-    global memory
+    global memory, flag
     memory = 0
     entry.delete(0, tk.END)
+    flag = False
 
 def calculate():
+    global flag
     expression = entry.get()
     try:
         result = eval(expression)
         entry.delete(0, tk.END)
         entry.insert(0, result)
         history_list.insert(tk.END, f"{expression} = {result}")
+        flag = True  # Set the flag after calculation
     except Exception as e:
         entry.delete(0, tk.END)
         entry.insert(0, "エラー")
         history_list.insert(tk.END, f"計算エラー: {e}")
 
 def calculate_function(func):
+    global flag
     expression = entry.get()
     try:
         value = float(expression)
@@ -54,6 +63,7 @@ def calculate_function(func):
         entry.delete(0, tk.END)
         entry.insert(0, result)
         history_list.insert(tk.END, f"{func}({math.degrees(value_rad)}°) = {math.degrees(result)}°")
+        flag = True  # Set the flag after calculation
     except Exception as e:
         entry.delete(0, tk.END)
         entry.insert(0, "エラー")
@@ -63,47 +73,51 @@ def exit_app():
     root.quit()
 
 def convert_units(history_list):
-    input_value = float(entry_value.get())
-    input_unit = unit_var.get()
-    
-    if input_unit == "日から時間":
-        result = input_value * 24
-        result_label.config(text=f"{input_value} 日は {result} 時間です")
-    elif input_unit == "時間から日":
-        result = input_value / 24
-        result_label.config(text=f"{input_value} 時間は {result} 日です")
-    elif input_unit == "日から分":
-        result = input_value * 1440
-        result_label.config(text=f"{input_value} 日は {result} 分です")
-    elif input_unit == "分から日":
-        result = input_value / 1440
-        result_label.config(text=f"{input_value} 分は {result} 日です")
-    elif input_unit == "日から秒":
-        result = input_value * 86400
-        result_label.config(text=f"{input_value} 日は {result} 秒です")
-    elif input_unit == "秒から日":
-        result = input_value / 86400
-        result_label.config(text=f"{input_value} 秒は {result} 日です")
-    elif input_unit == "時間から分":
-        result = input_value * 60
-        result_label.config(text=f"{input_value} 時間は {result} 分です")
-    elif input_unit == "分から時間":
-        result = input_value / 60
-        result_label.config(text=f"{input_value} 分は {result} 時間です")
-    elif input_unit == "時間から秒":
-        result = input_value * 3600
-        result_label.config(text=f"{input_value} 時間は {result} 秒です")
-    elif input_unit == "秒から時間":
-        result = input_value / 3600
-        result_label.config(text=f"{input_value} 秒は {result} 時間です")
-    elif input_unit == "分から秒":
-        result = input_value * 60
-        result_label.config(text=f"{input_value} 分は {result} 秒です")
-    elif input_unit == "秒から分":
-        result = input_value / 60
-        result_label.config(text=f"{input_value} 秒は {result} 分です")
-    
-    history_list.insert(tk.END, f"{input_value} {input_unit} = {result}")
+    try:
+        input_value = float(entry_value.get())
+        input_unit = unit_var.get()
+
+        result = 0
+
+        if input_unit == "日から時間":
+            result = input_value * 24
+        elif input_unit == "時間から日":
+            result = input_value / 24
+        elif input_unit == "日から分":
+            result = input_value * 24 * 60
+        elif input_unit == "分から日":
+            result = input_value / (24 * 60)
+        elif input_unit == "日から秒":
+            result = input_value * 24 * 60 * 60
+        elif input_unit == "秒から日":
+            result = input_value / (24 * 60 * 60)
+        elif input_unit == "時間から分":
+            result = input_value * 60
+        elif input_unit == "分から時間":
+            result = input_value / 60
+        elif input_unit == "時間から秒":
+            result = input_value * 60 * 60
+        elif input_unit == "秒から時間":
+            result = input_value / (60 * 60)
+        elif input_unit == "分から秒":
+            result = input_value * 60
+        elif input_unit == "秒から分":
+            result = input_value / 60
+        else:
+            raise ValueError("無効な変換単位")
+
+        result_label.config(text=f"{input_value} {input_unit} = {result}")
+        history_list.insert(tk.END, f"{input_value} {input_unit} = {result}")
+
+    except ValueError:
+        result_label.config(text="エラー: 数値を入力してください")
+        history_list.insert(tk.END, "変換エラー: 数値を入力してください")
+    except ZeroDivisionError:
+        result_label.config(text="エラー: 0で割ることはできません")
+        history_list.insert(tk.END, "変換エラー: 0で割ることはできません")
+    except Exception as e:
+        result_label.config(text=f"エラー: {e}")
+        history_list.insert(tk.END, f"変換エラー: {e}")
 
 root = tk.Tk()
 root.title("アプリ")
@@ -120,7 +134,7 @@ notebook.add(frame_time_converter, text="時間変換")
 frame_history = tk.Frame(notebook)
 notebook.add(frame_history, text="履歴")
 
-root.geometry("200x450")
+root.geometry("250x450")
 
 menubar = tk.Menu(root)
 root.config(menu=menubar)
@@ -191,10 +205,10 @@ instruction_label.pack()
 
 unit_var = tk.StringVar()
 unit_var.set("時間から分")
-unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var,"日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
+unit_option_menu = tk.OptionMenu(frame_time_converter, unit_var, "日から時間", "時間から日", "日から分", "分から日", "日から秒", "秒から日", "時間から分", "分から時間", "時間から秒", "秒から時間", "分から秒", "秒から分")
 unit_option_menu.pack()
 
-entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 16), justify="right")
+entry_value = tk.Entry(frame_time_converter, font=('Helvetica', 14), justify="right")
 entry_value.pack(fill="x", padx=10, pady=10)
 
 convert_button = tk.Button(frame_time_converter, text="変換", command=lambda: convert_units(history_list), font=('Helvetica', 14))
