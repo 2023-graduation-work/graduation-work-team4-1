@@ -17,6 +17,23 @@ def subtract_from_memory():
     memory -= current_value
     entry.delete(0, tk.END)
 
+def memory_store():
+    global memory
+    memory = float(entry.get())
+
+def memory_recall():
+    entry.delete(0, tk.END)
+    entry.insert(0, str(memory))
+
+def clear_memory():
+    global memory
+    memory = 0
+
+def clear_all():
+    entry.delete(0, tk.END)
+    clear_memory()
+
+
 def display_memory():
     entry.delete(0, tk.END)
     entry.insert(0, str(memory))
@@ -30,11 +47,16 @@ def button_click(number):
     entry.delete(0, tk.END)
     entry.insert(0, current + str(number))
 
-def clear():
-    global memory, flag
-    memory = 0
+def clear_entry():
     entry.delete(0, tk.END)
-    flag = False
+
+def clear_last_char():
+    current = entry.get()
+    entry.delete(0, tk.END)
+    entry.insert(0, current[:-1])
+
+def clear_all():
+    entry.delete(0, tk.END)
 
 def calculate():
     global flag
@@ -45,9 +67,17 @@ def calculate():
         entry.insert(0, result)
         history_list.insert(tk.END, f"{expression} = {result}")
         flag = True  # Set the flag after calculation
-    except Exception as e:
+    except SyntaxError:
         entry.delete(0, tk.END)
         entry.insert(0, "エラー")
+        history_list.insert(tk.END, "計算エラー: 無効な式です")
+    except ZeroDivisionError:
+        entry.delete(0, tk.END)
+        entry.insert(0, "エラー")
+        history_list.insert(tk.END, "計算エラー: 0で割ることはできません")
+    except Exception as e:
+        entry.delete(0, tk.END)
+        entry.insert(0, f"エラー: {e}")
         history_list.insert(tk.END, f"計算エラー: {e}")
 
 def calculate_function(func):
@@ -64,9 +94,13 @@ def calculate_function(func):
         entry.insert(0, result)
         history_list.insert(tk.END, f"{func}({math.degrees(value_rad)}°) = {math.degrees(result)}°")
         flag = True  # Set the flag after calculation
+    except ValueError:
+        entry.delete(0, tk.END)
+        entry.insert(0, "エラー: 無効な入力です")
+        history_list.insert(tk.END, f"計算エラー: 無効な入力です")
     except Exception as e:
         entry.delete(0, tk.END)
-        entry.insert(0, "エラー")
+        entry.insert(0, f"エラー: {e}")
         history_list.insert(tk.END, f"計算エラー: {e}")
 
 def exit_app():
@@ -80,34 +114,46 @@ def convert_units(history_list):
         result = 0
 
         if input_unit == "日から時間":
-            result = input_value * 24
+            result = input_value * 24 
+            input_unit2 = "時間"
         elif input_unit == "時間から日":
             result = input_value / 24
+            input_unit2 = "日"
         elif input_unit == "日から分":
             result = input_value * 24 * 60
+            input_unit2 = "分"
         elif input_unit == "分から日":
             result = input_value / (24 * 60)
+            input_unit2 = "日"
         elif input_unit == "日から秒":
             result = input_value * 24 * 60 * 60
+            input_unit2 = "秒"
         elif input_unit == "秒から日":
             result = input_value / (24 * 60 * 60)
+            input_unit2 = "日"
         elif input_unit == "時間から分":
             result = input_value * 60
+            input_unit2 = "分"
         elif input_unit == "分から時間":
             result = input_value / 60
+            input_unit2 = "時間"
         elif input_unit == "時間から秒":
             result = input_value * 60 * 60
+            input_unit2 = "秒"
         elif input_unit == "秒から時間":
             result = input_value / (60 * 60)
+            input_unit2 = "時間"
         elif input_unit == "分から秒":
             result = input_value * 60
+            input_unit2 = "秒"
         elif input_unit == "秒から分":
             result = input_value / 60
+            input_unit2 = "分"
         else:
             raise ValueError("無効な変換単位")
 
-        result_label.config(text=f"{input_value} {input_unit} = {result}")
-        history_list.insert(tk.END, f"{input_value} {input_unit} = {result}")
+        result_label.config(text=f"{input_value} {input_unit} = {result}{input_unit2}")
+        history_list.insert(tk.END, f"{input_value} {input_unit} = {result}{input_unit2}")
 
     except ValueError:
         result_label.config(text="エラー: 数値を入力してください")
@@ -118,6 +164,9 @@ def convert_units(history_list):
     except Exception as e:
         result_label.config(text=f"エラー: {e}")
         history_list.insert(tk.END, f"変換エラー: {e}")
+
+def disable_entry(event):
+    return "break"
 
 root = tk.Tk()
 root.title("アプリ")
@@ -143,17 +192,18 @@ file_menu = tk.Menu(menubar)
 menubar.add_cascade(label="ファイル", menu=file_menu)
 file_menu.add_command(label="終了", command=exit_app)
 
-entry = tk.Entry(frame_calculator, bg="white", font=('Helvetica', 20), justify="right")
+entry = tk.Entry(frame_calculator, bg="white", font=('Helvetica', 20), justify="right", state='normal')
+
 entry.pack(fill="x", padx=10, pady=10)
 
 btn_width = 2
 btn_height = 1
 
 buttons = [
-    ("7", "white"), ("8", "white"), ("9", "white"), ("/", "white"),
-    ("4", "white"), ("5", "white"), ("6", "white"), ("*", "white"),
-    ("1", "white"), ("2", "white"), ("3", "white"), ("-", "white"),
-    ("0", "white"), (".", "white"), ("=", "white"), ("+", "white"),
+    ("7", "white"), ("8", "white"), ("9", "white"), ("<-", "white"), ("OC", "white"),
+    ("4", "white"), ("5", "white"), ("6", "white"), ("*", "white"), ("/", "white"),
+    ("1", "white"), ("2", "white"), ("3", "white"), ("+", "white"), ("-", "white"),
+    ("0", "white"), (".", "white"), ("=", "white"),  ("%", "white"),
 ]
 
 button_frame = tk.Frame(frame_calculator)
@@ -172,32 +222,39 @@ subtract_memory_button.grid(row=row_val, column=col_val, padx=2, pady=2)
 
 col_val += 1
 
-display_memory_button = tk.Button(button_frame, text="M", command=display_memory, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
-display_memory_button.grid(row=row_val, column=col_val, padx=2, pady=2)
+memory_store_button = tk.Button(button_frame, text="MS", command=memory_store, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
+memory_store_button.grid(row=row_val, column=col_val, padx=2, pady=2)
 
 col_val += 1
 
-clear_button = tk.Button(button_frame, text="C", command=clear, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
-clear_button.grid(row=row_val, column=col_val, padx=2, pady=2)
+memory_recall_button = tk.Button(button_frame, text="MR", command=memory_recall, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
+memory_recall_button.grid(row=row_val, column=col_val, padx=2, pady=2)
+
+col_val += 1
+
+clear_memory_button = tk.Button(button_frame, text="MC", command=clear_memory, padx=5, pady=5, width=btn_width, height=btn_height, bg="white", font=('Helvetica', 14))
+clear_memory_button.grid(row=row_val, column=col_val, padx=2, pady=2)
 
 row_val += 1
 col_val = 0
 
 for label, color in buttons:
-    if label in [""]:
-        tk.Button(button_frame, text=label, padx=5, pady=5, width=btn_width, height=btn_height, command=lambda b=label: calculate_function(b), bg=color, font=('Helvetica', 14)).grid(row=row_val, column=col_val, padx=2, pady=2)
+    if label == "<-":
+        tk.Button(button_frame, text=label, padx=5, pady=5, width=btn_width, height=btn_height, command=clear_last_char, bg=color, font=('Helvetica', 14)).grid(row=row_val, column=col_val, padx=2, pady=2)
+    elif label == "OC":
+        tk.Button(button_frame, text=label, padx=5, pady=5, width=btn_width, height=btn_height, command=clear_all, bg=color, font=('Helvetica', 14)).grid(row=row_val, column=col_val, padx=2, pady=2)
     else:
         tk.Button(button_frame, text=label, padx=5, pady=5, width=btn_width, height=btn_height, command=lambda b=label: button_click(b) if b != "=" else calculate(), bg=color, font=('Helvetica', 16)).grid(row=row_val, column=col_val, padx=2, pady=2)
     
     col_val += 1
-    if col_val > 3:
+    if col_val > 4:
         col_val = 0
         row_val += 1
 
 history_label = tk.Label(frame_history, text="履歴", bg="black", fg="white", font=('Helvetica', 16))
 history_label.pack()
 
-history_list = tk.Listbox(frame_history, bg="white", font=('Helvetica', 14))
+history_list = tk.Listbox(frame_history, bg="white", font=('Helvetica', 10))
 history_list.pack(fill="both", expand=True)
 
 instruction_label = tk.Label(frame_time_converter, font=('Helvetica', 14))
@@ -216,5 +273,8 @@ convert_button.pack()
 
 result_label = tk.Label(frame_time_converter, font=('Helvetica', 10))
 result_label.pack()
+
+# キーボードイベントを無効化
+entry.bind("<Key>", disable_entry)
 
 root.mainloop()
