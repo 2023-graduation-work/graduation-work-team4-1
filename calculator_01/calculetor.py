@@ -56,7 +56,11 @@ def clear_last_char():
     entry.insert(0, current[:-1])
 
 def clear_all():
+def clear():
+    global memory, flag
+    memory = 0
     entry.delete(0, tk.END)
+    flag = False
 
 def calculate():
     global flag
@@ -68,6 +72,7 @@ def calculate():
         history_list.insert(tk.END, f"{expression} = {result}")
         flag = True  # Set the flag after calculation
     except SyntaxError:
+    except Exception as e:
         entry.delete(0, tk.END)
         entry.insert(0, "エラー")
         history_list.insert(tk.END, "計算エラー: 無効な式です")
@@ -154,7 +159,7 @@ def convert_units(history_list):
 
         result_label.config(text=f"{input_value} {input_unit} = {result}{input_unit2}")
         history_list.insert(tk.END, f"{input_value} {input_unit} = {result}{input_unit2}")
-
+            
     except ValueError:
         result_label.config(text="エラー: 数値を入力してください")
         history_list.insert(tk.END, "変換エラー: 数値を入力してください")
@@ -164,7 +169,6 @@ def convert_units(history_list):
     except Exception as e:
         result_label.config(text=f"エラー: {e}")
         history_list.insert(tk.END, f"変換エラー: {e}")
-
 def disable_entry(event):
     return "break"
 
